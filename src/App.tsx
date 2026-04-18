@@ -5,7 +5,6 @@ import {
   getLastSeenWithPodo,
   getPersonList,
 } from './utils/personIndex';
-import './App.css';
 
 function App() {
   useEffect(() => {
