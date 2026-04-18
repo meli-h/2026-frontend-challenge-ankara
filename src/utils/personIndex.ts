@@ -33,7 +33,12 @@ function splitNames(raw: string): string[] {
 }
 
 function normalizeKey(name: string): string {
-  return name.trim().toLocaleLowerCase('tr');
+  return name
+    .trim()
+    .toLocaleLowerCase('tr')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
 }
 
 export function buildPersonIndex(
