@@ -201,3 +201,15 @@ export function getLastSeenWithPodo(
   sightings.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return sightings[0];
 }
+
+export function getPodoRoute(records: AppRecord[]): Sighting[] {
+  const podoKey = normalizeKey('Podo');
+  return records
+    .filter(
+      (r): r is Sighting =>
+        r.kind === 'sighting' &&
+        (normalizeKey(r.personName) === podoKey ||
+          splitNames(r.seenWith).some((n) => normalizeKey(n) === podoKey)),
+    )
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}

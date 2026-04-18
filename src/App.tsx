@@ -5,6 +5,7 @@ import {
   getLastSeenWithPodo,
   getMostSuspicious,
   getPersonList,
+  getPodoRoute,
   personMatchesQuery,
   type PersonEntry,
 } from './utils/personIndex';
@@ -14,6 +15,7 @@ import PersonList from './components/PersonList';
 import TimelinePanel from './components/TimelinePanel';
 import PodoLastSeenCard from './components/PodoLastSeenCard';
 import MostSuspiciousCard from './components/MostSuspiciousCard';
+import PodoRouteCard from './components/PodoRouteCard';
 
 function App() {
   const [records, setRecords] = useState<AppRecord[]>([]);
@@ -55,6 +57,7 @@ function App() {
     () => getMostSuspicious(personIndex),
     [personIndex],
   );
+  const podoRoute = useMemo(() => getPodoRoute(records), [records]);
 
   useEffect(() => {
     if (!selected && personList.length > 0) {
@@ -106,6 +109,13 @@ function App() {
           />
           <MostSuspiciousCard
             entries={mostSuspicious}
+            onSelectPerson={setSelected}
+          />
+        </div>
+        <div className="mt-3">
+          <PodoRouteCard
+            sightings={podoRoute}
+            personIndex={personIndex}
             onSelectPerson={setSelected}
           />
         </div>
