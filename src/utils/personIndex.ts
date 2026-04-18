@@ -38,7 +38,8 @@ function normalizeKey(name: string): string {
     .toLocaleLowerCase('tr')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' ')
+    .replace(/\s+[a-z]\.?$/i, '');
 }
 
 export function buildPersonIndex(
