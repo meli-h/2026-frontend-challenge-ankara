@@ -117,11 +117,20 @@ export function personMatchesQuery(
   if (!q) return true;
   if (person.normalizedName.includes(q)) return true;
   return person.appearances.some(({ record }) =>
-    recordMatchesQuery(record, q),
+    recordMatchesNormalized(record, q),
   );
 }
 
-function recordMatchesQuery(record: AppRecord, q: string): boolean {
+export function recordMatchesQuery(
+  record: AppRecord,
+  rawQuery: string,
+): boolean {
+  const q = rawQuery.trim().toLocaleLowerCase('tr');
+  if (!q) return true;
+  return recordMatchesNormalized(record, q);
+}
+
+function recordMatchesNormalized(record: AppRecord, q: string): boolean {
   const fields: string[] = [record.location];
   switch (record.kind) {
     case 'checkin':

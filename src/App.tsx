@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchAllRecords } from './api/jotform';
 import {
   buildPersonIndex,
+  getLastSeenWithPodo,
   getPersonList,
   personMatchesQuery,
   type PersonEntry,
@@ -10,6 +11,7 @@ import type { AppRecord } from './types';
 import SearchBar from './components/SearchBar';
 import PersonList from './components/PersonList';
 import TimelinePanel from './components/TimelinePanel';
+import PodoLastSeenCard from './components/PodoLastSeenCard';
 
 function App() {
   const [records, setRecords] = useState<AppRecord[]>([]);
@@ -43,6 +45,10 @@ function App() {
 
   const personIndex = useMemo(() => buildPersonIndex(records), [records]);
   const personList = useMemo(() => getPersonList(personIndex), [personIndex]);
+  const lastPodoSighting = useMemo(
+    () => getLastSeenWithPodo(records),
+    [records],
+  );
 
   useEffect(() => {
     if (!selected && personList.length > 0) {
@@ -87,6 +93,13 @@ function App() {
            Missing Podo: The Ankara Case
         </h1>
         <div className="mt-3">
+          <PodoLastSeenCard
+            sighting={lastPodoSighting}
+            personIndex={personIndex}
+            onSelectPerson={setSelected}
+          />
+        </div>
+        <div className="mt-3">
           <SearchBar value={query} onChange={setQuery} />
         </div>
       </header>
@@ -106,6 +119,7 @@ function App() {
               person={selected}
               personIndex={personIndex}
               onSelectPerson={setSelected}
+              query={query}
             />
           ) : (
             <div className="text-gray-500">

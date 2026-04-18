@@ -1,16 +1,29 @@
-import type { PersonEntry } from '../utils/personIndex';
+import {
+  recordMatchesQuery,
+  type PersonEntry,
+} from '../utils/personIndex';
 import RecordCard from './RecordCard';
 
 interface Props {
   person: PersonEntry;
   personIndex: Map<string, PersonEntry>;
   onSelectPerson: (person: PersonEntry) => void;
+  query: string;
 }
 
-function TimelinePanel({ person, personIndex, onSelectPerson }: Props) {
+function TimelinePanel({
+  person,
+  personIndex,
+  onSelectPerson,
+  query,
+}: Props) {
   const sorted = [...person.appearances].sort((a, b) =>
     a.record.createdAt.localeCompare(b.record.createdAt),
   );
+
+  const visible = query.trim()
+    ? sorted.filter((a) => recordMatchesQuery(a.record, query))
+    : sorted;
 
   return (
     <div>
@@ -27,15 +40,21 @@ function TimelinePanel({ person, personIndex, onSelectPerson }: Props) {
           ))}
         </div>
         <div className="mt-2 text-sm text-gray-600">
-          {person.appearances.length} toplam kayıt
+          {query.trim()
+            ? `${visible.length} eşleşen kayıt · ${person.appearances.length} toplam`
+            : `${person.appearances.length} toplam kayıt`}
         </div>
       </div>
 
-      {sorted.length === 0 ? (
-        <div className="text-sm text-gray-500">Bu kişi için kayıt yok.</div>
+      {visible.length === 0 ? (
+        <div className="text-sm text-gray-500">
+          {query.trim()
+            ? 'Bu arama ile eşleşen kayıt yok.'
+            : 'Bu kişi için kayıt yok.'}
+        </div>
       ) : (
         <ul className="space-y-3">
-          {sorted.map((appearance, i) => (
+          {visible.map((appearance, i) => (
             <li key={`${appearance.record.kind}-${appearance.record.id}-${i}`}>
               <RecordCard
                 record={appearance.record}
