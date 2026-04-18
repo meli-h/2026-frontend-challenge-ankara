@@ -21,7 +21,7 @@ An investigation dashboard built for the "Missing Podo: The Ankara Case" scenari
 - **State Handling**: Explicit loading, error, and empty states; StrictMode-safe fetch effect.
 
 ### Enhanced Features
-- **Smarter Person Matching**: Diacritic-insensitive, Turkish-locale-aware normalization so `Kağan` and `Kagan` collapse into a single person while preserving intentionally distinct forms like `Kağan A.`.
+
 - **Search**: Filters both the people list and the active timeline by person name, location, or content fields (notes, tips, message text).
 - **Timeline Kind Filter**: Quick filter buttons (`All`, `Sighting`, `Message`, `Tip`, `Note`, `Checkin`) to focus on a specific record type while investigating a person.
 - **Podo Last Seen Card**: Summary card surfacing Podo's most recent sighting, with a direct link to the companion.
