@@ -17,6 +17,7 @@ export interface PersonAppearance {
 
 export interface PersonEntry {
   name: string;
+  normalizedName: string;
   roles: Set<PersonRole>;
   appearances: PersonAppearance[];
 }
@@ -50,7 +51,12 @@ export function buildPersonIndex(
     const key = normalizeKey(name);
     let entry = index.get(key);
     if (!entry) {
-      entry = { name, roles: new Set<PersonRole>(), appearances: [] };
+      entry = {
+        name,
+        normalizedName: key,
+        roles: new Set<PersonRole>(),
+        appearances: [],
+      };
       index.set(key, entry);
     }
     entry.roles.add(role);
@@ -93,6 +99,48 @@ export function getPersonList(
   return Array.from(index.values()).sort(
     (a, b) => b.appearances.length - a.appearances.length,
   );
+}
+
+export function lookupPerson(
+  index: Map<string, PersonEntry>,
+  name: string,
+): PersonEntry | undefined {
+  if (!name) return undefined;
+  return index.get(normalizeKey(name));
+}
+
+export function personMatchesQuery(
+  person: PersonEntry,
+  rawQuery: string,
+): boolean {
+  const q = rawQuery.trim().toLocaleLowerCase('tr');
+  if (!q) return true;
+  if (person.normalizedName.includes(q)) return true;
+  return person.appearances.some(({ record }) =>
+    recordMatchesQuery(record, q),
+  );
+}
+
+function recordMatchesQuery(record: AppRecord, q: string): boolean {
+  const fields: string[] = [record.location];
+  switch (record.kind) {
+    case 'checkin':
+      fields.push(record.note);
+      break;
+    case 'message':
+      fields.push(record.text);
+      break;
+    case 'sighting':
+      fields.push(record.note);
+      break;
+    case 'personalNote':
+      fields.push(record.note, record.mentionedPeople);
+      break;
+    case 'anonymousTip':
+      fields.push(record.tip);
+      break;
+  }
+  return fields.some((f) => f.toLocaleLowerCase('tr').includes(q));
 }
 
 export function getLastSeenWithPodo(
