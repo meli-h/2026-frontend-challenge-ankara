@@ -3,6 +3,7 @@ import { fetchAllRecords } from './api/jotform';
 import {
   buildPersonIndex,
   getLastSeenWithPodo,
+  getMostSuspicious,
   getPersonList,
   personMatchesQuery,
   type PersonEntry,
@@ -12,6 +13,7 @@ import SearchBar from './components/SearchBar';
 import PersonList from './components/PersonList';
 import TimelinePanel from './components/TimelinePanel';
 import PodoLastSeenCard from './components/PodoLastSeenCard';
+import MostSuspiciousCard from './components/MostSuspiciousCard';
 
 function App() {
   const [records, setRecords] = useState<AppRecord[]>([]);
@@ -48,6 +50,10 @@ function App() {
   const lastPodoSighting = useMemo(
     () => getLastSeenWithPodo(records),
     [records],
+  );
+  const mostSuspicious = useMemo(
+    () => getMostSuspicious(personIndex),
+    [personIndex],
   );
 
   useEffect(() => {
@@ -92,10 +98,14 @@ function App() {
         <h1 className="text-2xl font-bold text-gray-900">
            Missing Podo: The Ankara Case
         </h1>
-        <div className="mt-3">
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
           <PodoLastSeenCard
             sighting={lastPodoSighting}
             personIndex={personIndex}
+            onSelectPerson={setSelected}
+          />
+          <MostSuspiciousCard
+            entries={mostSuspicious}
             onSelectPerson={setSelected}
           />
         </div>

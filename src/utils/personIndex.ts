@@ -157,6 +157,37 @@ function recordMatchesNormalized(record: AppRecord, q: string): boolean {
   return fields.some((f) => f.toLocaleLowerCase('tr').includes(q));
 }
 
+export interface SuspiciousEntry {
+  person: PersonEntry;
+  tipCount: number;
+  mentionCount: number;
+  score: number;
+}
+
+export function getMostSuspicious(
+  index: Map<string, PersonEntry>,
+  limit = 5,
+): SuspiciousEntry[] {
+  const podoKey = normalizeKey('Podo');
+  const ranked: SuspiciousEntry[] = [];
+
+  for (const person of index.values()) {
+    if (person.normalizedName === podoKey) continue;
+    let tipCount = 0;
+    let mentionCount = 0;
+    for (const { role } of person.appearances) {
+      if (role === 'suspect') tipCount += 1;
+      else if (role === 'mentioned') mentionCount += 1;
+    }
+    if (tipCount === 0 && mentionCount === 0) continue;
+    const score = tipCount * 3 + mentionCount;
+    ranked.push({ person, tipCount, mentionCount, score });
+  }
+
+  ranked.sort((a, b) => b.score - a.score);
+  return ranked.slice(0, limit);
+}
+
 export function getLastSeenWithPodo(
   records: AppRecord[],
 ): Sighting | undefined {
