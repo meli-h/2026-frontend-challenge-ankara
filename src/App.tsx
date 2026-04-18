@@ -93,7 +93,7 @@ function App() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl p-4">
+    <div className="mx-auto max-w-6xl p-3 md:p-4">
       <header className="mb-4">
         <h1 className="text-2xl font-bold text-gray-900">
            Missing Podo: The Ankara Case
@@ -114,8 +114,8 @@ function App() {
         </div>
       </header>
 
-      <main className="grid grid-cols-[280px_1fr] gap-6">
-        <aside className="max-h-[75vh] overflow-y-auto">
+      <main className="grid grid-cols-1 gap-4 md:grid-cols-[280px_1fr] md:gap-6">
+        <aside className="max-h-60 overflow-y-auto md:max-h-[75vh]">
           <PersonList
             persons={filteredPersons}
             selected={selected}
