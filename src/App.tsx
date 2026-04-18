@@ -26,8 +26,6 @@ function App() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetchAllRecords()
       .then((data) => {
@@ -59,12 +57,11 @@ function App() {
   );
   const podoRoute = useMemo(() => getPodoRoute(records), [records]);
 
-  useEffect(() => {
-    if (!selected && personList.length > 0) {
-      const podo = personList.find((p) => p.normalizedName === 'podo');
-      setSelected(podo ?? personList[0]);
-    }
-  }, [personList, selected]);
+  const effectiveSelected =
+    selected ??
+    personList.find((p) => p.normalizedName === 'podo') ??
+    personList[0] ??
+    null;
 
   const filteredPersons = useMemo(() => {
     if (!query.trim()) return personList;
@@ -128,15 +125,15 @@ function App() {
         <aside className="max-h-60 overflow-y-auto md:max-h-[75vh]">
           <PersonList
             persons={filteredPersons}
-            selected={selected}
+            selected={effectiveSelected}
             onSelect={setSelected}
           />
         </aside>
 
         <section>
-          {selected ? (
+          {effectiveSelected ? (
             <TimelinePanel
-              person={selected}
+              person={effectiveSelected}
               personIndex={personIndex}
               onSelectPerson={setSelected}
               query={query}

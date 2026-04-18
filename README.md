@@ -3,12 +3,12 @@
 ## User Information
 
 - **Name**: Ahmet Melih Bulut
-- **Project Date**:
+- **Project Date**:18/04/2026
 - **Hackathon Duration**: 3 hours
 
 ## Project Description
 
-An investigation dashboard built for the "Missing Podo: The Ankara Case" scenario. The app pulls submissions from five different Jotform forms (Checkins, Messages, Sightings, Personal Notes, Anonymous Tips), merges them into a single timeline, and helps the user explore the chain of Podo's last sightings and identify the most suspicious people. Built with React 19, TypeScript (strict), Vite, and Tailwind CSS v4.
+An investigation dashboard built for the "Missing Podo: The Ankara Case" scenario. The app pulls submissions from five different Jotform forms (Checkins, Messages, Sightings, Personal Notes, Anonymous Tips), merges them into a single timeline, and helps the user explore the chain of Podo's last sightings and identify the most suspicious people. Built with React 19, TypeScript, Vite, and Tailwind CSS.
 
 ## Features
 
@@ -57,13 +57,7 @@ npm run dev
 
 The application will be available at http://localhost:5173/
 
-Additional scripts:
 
-```bash
-npm run build    # type-check and build for production
-npm run lint     # run ESLint
-npm run preview  # preview the production build
-```
 
 ## Project Structure
 
